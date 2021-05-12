@@ -19,6 +19,9 @@ struct PoliceForceOfficersCommand: ParsableCommand {
 
     func run() throws {
         print("")
+        defer {
+            print("")
+        }
 
         let policeOfficers = try policeDataAPI.policeForces.fetchSeniorOfficers(forPoliceForce: policeForceID)
 
@@ -27,26 +30,7 @@ struct PoliceForceOfficersCommand: ParsableCommand {
             return
         }
 
-        let nameColumn = TextTableColumn(header: "Name")
-        let rankColumn = TextTableColumn(header: "Rank")
-        let emailColumn = TextTableColumn(header: "Email")
-        let telephoneColumn = TextTableColumn(header: "Telephone")
-
-        var table = TextTable(columns: [nameColumn, rankColumn, emailColumn, telephoneColumn])
-        table.header = "Senior Officers"
-
-        policeOfficers.forEach { policeOfficer in
-            table.addRow(
-                values: [
-                    policeOfficer.name,
-                    policeOfficer.rank,
-                    policeOfficer.contactDetails.email ?? "",
-                    policeOfficer.contactDetails.telephone ?? ""
-                ]
-            )
-        }
-
-        print(table.render())
+        print(policeOfficers.renderTable(header: "Senior Officers"))
     }
 
 }

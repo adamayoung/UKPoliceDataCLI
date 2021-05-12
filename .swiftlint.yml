@@ -23,7 +23,9 @@ identifier_name:
     error: 4
   max_length: 60
   excluded:
+    - fax
     - id
+    - web
 
 file_length:
   warning: 500

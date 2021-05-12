@@ -19,20 +19,20 @@ struct NeighbourhoodListCommand: ParsableCommand {
 
     func run() throws {
         print("")
-
-        let neightbourhoods = try policeDataAPI.neighbourhoods.fetchAll(inPoliceForce: policeForceID)
-
-        let idColumn = TextTableColumn(header: "ID")
-        let nameColumn = TextTableColumn(header: "Name")
-
-        var table = TextTable(columns: [idColumn, nameColumn])
-        table.header = "Neighbourhoods"
-
-        neightbourhoods.forEach { neightbourhood in
-            table.addRow(values: [neightbourhood.id, neightbourhood.name])
+        defer {
+            print("")
         }
 
-        print(table.render())
+        let policeForce = try policeDataAPI.policeForces.fetchDetails(forPoliceForce: policeForceID)
+        let neighbourhoods = try policeDataAPI.neighbourhoods.fetchAll(inPoliceForce: policeForceID)
+
+        guard !neighbourhoods.isEmpty else {
+            print("No Neighbourhoods found.")
+            return
+        }
+
+        print(policeForce.name)
+        print(neighbourhoods.renderTable(header: "Neighbourhoods"))
     }
 
 }
