@@ -16,20 +16,13 @@ struct PoliceForceListCommand: ParsableCommand {
 
     func run() throws {
         print("")
+        defer {
+            print("")
+        }
 
         let policeForces = try policeDataAPI.policeForces.fetchAll()
 
-        let idColumn = TextTableColumn(header: "ID")
-        let nameColumn = TextTableColumn(header: "Name")
-
-        var table = TextTable(columns: [idColumn, nameColumn])
-        table.header = "UK Police Forces"
-
-        policeForces.forEach { policeForce in
-            table.addRow(values: [policeForce.id, policeForce.name])
-        }
-
-        print(table.render())
+        print(policeForces.renderTable(header: "UK Police Forces"))
     }
 
 }

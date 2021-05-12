@@ -25,6 +25,9 @@ struct NeighbourhoodTeamCommand: ParsableCommand {
 
     func run() throws {
         print("")
+        defer {
+            print("")
+        }
 
         let policeForce = try policeDataAPI.policeForces.fetchDetails(forPoliceForce: policeForceID)
         let neightbourhood = try policeDataAPI.neighbourhoods.fetchDetails(forNeighbourhood: id,
@@ -37,27 +40,8 @@ struct NeighbourhoodTeamCommand: ParsableCommand {
             return
         }
 
-        let nameColumn = TextTableColumn(header: "Name")
-        let rankColumn = TextTableColumn(header: "Rank")
-        let emailColumn = TextTableColumn(header: "Email")
-        let telephoneColumn = TextTableColumn(header: "Telephone")
-
-        var table = TextTable(columns: [nameColumn, rankColumn, emailColumn, telephoneColumn])
-        table.header = "Senior Officers"
-
-        policeOfficers.forEach { policeOfficer in
-            table.addRow(
-                values: [
-                    policeOfficer.name,
-                    policeOfficer.rank,
-                    policeOfficer.contactDetails.email ?? "",
-                    policeOfficer.contactDetails.telephone ?? ""
-                ]
-            )
-        }
-
         print("\(policeForce.name) / \(neightbourhood.name)")
-        print(table.render())
+        print(policeOfficers.renderTable(header: "Neighbourhood Team"))
     }
 
 }
